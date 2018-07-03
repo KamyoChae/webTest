@@ -1,0 +1,483 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+}
+body{
+    height: 100vh;
+}
+a{
+    color: #424242;
+    text-decoration: none;
+}
+.wrapperdiv{
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+   
+    background: rgb(255, 255, 255);
+}
+.wraper{
+    position: absolute;
+    width: 200%;
+    min-height: 100vh;
+}
+
+.wraper>div{
+    box-sizing: border-box;
+    position: absolute;
+}
+.wraper-left{
+    
+    width: 100vw;
+    height: inherit;
+    
+}
+
+.left-top{
+    
+    width: 80vw;
+    margin: auto;
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+.hit-div{
+    display: inline-block;
+    width: 20vw;
+    text-align: center;
+}
+
+.hit-div .hit{
+    display:block;
+    font-size: 4vw;
+    font-weight: 100;
+    padding: 2vw;
+    border-radius: 2vw;
+    background: rgb(69, 164, 228);
+    color: #fff;
+    cursor: pointer;
+}
+.hit-div .active{
+    background: none;
+    border: #666 1px solid;
+    color: #424242;
+}
+
+div[class^="day"]{
+    height: 60%;
+    width: 30%;
+}
+
+div[class^="day"]>span{
+    display: block;
+    margin-right: 3vw;
+    text-align: center;
+}
+span[class$="-nums"]{
+    font-size: 9vw;
+    color: #424242;
+}
+span[class$="-text"]{
+    color: rgb(194, 194, 194);
+    font-size: 4vw;
+}
+div[class^="dayHit"]{
+    border-right: 1px solid rgb(170, 170, 170);
+}
+
+
+
+
+[class^=ul-child]{
+    background: #ffffff;
+    color: #424242;
+    padding: 0 15vw;
+    display: none;
+    font-size: 4vw;
+}
+[class^=ul-child] li{
+    padding-top: 2vw;
+    font-size: 4vw;
+}
+[class^=ul-child] li:last-child{
+    padding-bottom: 4vw;
+}
+[class^=ul-child] li:active{
+    color: rgb(69, 164, 228);
+}
+
+.wrapper-ul{
+
+    box-sizing: border-box;
+    width: 90%;
+    padding: 5vw 4vw;
+    border: #acacac solid 1px;
+    border-radius: 4px;
+    margin: 5vh auto 0 auto;
+}
+.ul-list{
+    border-top: 2px solid #eee;
+}
+.ul-list>ul{
+    list-style: none;
+
+}
+.nav{
+    font-weight: 500;
+    font-size: 4.5vw;
+    padding: 3vw 4vw;
+    border-top: 1px solid #acacac;
+}
+.nav:first-of-type{
+    border-top: none;
+}
+.nav:last-of-type + ul:last-child{
+    border-bottom: 1px solid #acacac;
+}
+.nav a{
+    font-size: 4.5vw;
+}
+
+i.iconfont{
+    margin-right: 1em;
+}
+.icon-moreunfold, .icon-less{
+    float: right;
+}
+
+.mine{
+    left: 100vw;
+    width: 100vw;
+    height: inherit;
+}
+.mine-top{
+    overflow: hidden;
+    width: 100%;
+    height: 25vh;
+    background-image: url(../images/usericon.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.cover{
+    width: 100%;
+    height: 100%;
+    background: rgba(29, 50, 77, 0.8);
+}
+.user{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+.icon{
+    background-image: url(../images/usericon.jpg);
+    background-position: center;
+    background-size: cover;
+    width: 20vw;
+    height: 20vw;
+    margin: 5% auto 1% auto;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+.username-title{
+    display: block;
+    font-size: 4.5vw;
+    color: #fff;
+}
+.span-title{
+    line-height: 7vh;
+    color: #ffffff;
+    font-size: 3.5vw;
+    font-weight: 100;
+}
+
+.mine-list ul li{
+    font-size: 4.5vw;
+    list-style: none;
+    color: #666;
+    background: #fff;
+}
+.mine-list{
+    box-sizing: border-box;
+    width: 90%;
+    padding: 5vw 4vw;
+    border: #acacac solid 1px;
+    border-radius: 4px;
+    margin: 5vh auto;
+}
+.mine-nav{
+    padding: 3vw 4vw;
+    border-top: 1px solid #acacac;
+}
+.mine-nav:first-of-type{
+    border-top: none;
+}
+.mine-nav:last-of-type{
+    border-bottom:  none;
+}
+.mine-nav-count{
+    font-size: 4.5vw;
+    color: rgb(69, 164, 228);
+    float: right;
+    
+}
+
+
+.logindiv{
+    position: absolute;
+    box-sizing: border-box;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 1);
+}
+.login-title{
+    display: block;
+    text-align: center;
+    width: 80%;
+    margin: 15% auto;
+    font-size: 8vw;
+    font-weight: 100;
+}
+
+.username, .password, .submit, .notic{
+    display: block;
+    width: 80vw;
+    padding: 3vw;
+    font-size: 5vw;
+    font-weight: 100;
+    color:#424242;
+    margin: 8% auto;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+}
+
+.submit{
+    background: rgb(57, 137, 190);
+    text-align: center;
+    color: #fff;
+    font-weight: 100;
+    font-size: 4.5vw;
+}
+.notic{
+    border: none;
+    padding-top:0;
+    padding-bottom: 0; 
+    margin-top: -2em;
+    color: red;
+    font-size: 3vw;
+    font-weight: 400;
+    display: none;
+}
+
+
+
+
+.test-group{
+    display: none;
+    box-sizing: border-box;
+    position: absolute;
+    background: rgb(255, 255, 255);
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+}
+.test-top{
+    position: relative;
+    width: 100vw;
+    height: 10vh;
+    
+}
+.test-top div{
+    position: relative;
+    box-sizing: border-box;
+    font-size: 5vw;
+    
+    padding: 0 2vh 0 0;
+    width: 100vw;
+    font-weight: 100;
+    color: #fff;
+}
+.test-nav{
+    background:rgb(57, 137, 190);
+    height:6vh;
+    line-height: 6vh;
+}
+span.home{
+    font-size: 5vw;
+    padding: 2vw;
+    box-sizing: border-box;
+    width: 2vw;
+    height: 2vw;
+}
+div.test-content{
+    font-size: 2vh;
+    background:  #424242;
+    height: 4vh;
+    line-height: 4vh;
+    
+    padding: 0 2vh 0 2vh;
+}
+.navtime , .navnum{
+    font-size: 2.5vh;
+    float: right;
+}
+.navnum{
+    color: #fff;
+    font-size: 2vh;
+}
+
+
+.testHere{
+    position: relative;
+    width: 1000vw;
+    height: 85vh;
+}
+.question{
+    float: left;
+    position: relative;
+    box-sizing: border-box;
+    padding: 4vw;
+    background: #ffffff;
+    width: 100vw;
+    height: 100%;
+}
+.question span.Collection{
+    position: absolute;
+    bottom: 10vw;
+    right: 10vw;
+    font-size: 5vw;
+    height: 10vw;
+    width: 10vw;
+    border-radius: 50%;
+    color: rgb(57, 137, 190);
+    font-size: 8vw;
+    line-height: 10vw;
+    text-align: center;
+}
+.test-title{
+    font-size: 4.5vw;
+}
+.checkdiv{
+    width: 100%;
+    margin-top: 5%;
+}
+.checkItem span{
+    font-size: 4vw;
+    vertical-align: middle;
+}
+.checkItem{
+    margin: 4vw;
+}
+.checkText{
+    display: inline-block;
+    width: 85%;
+}
+.checkBtn{
+    display: inline-block;
+    border: 1px solid rgb(57, 137, 190);
+
+    width: 8vw;
+    height: 8vw;
+    line-height: 8vw;
+    border-radius: 50%;
+    text-align: center;
+    margin-right: 2vw;
+}
+.from-answer{
+    width: 100%;
+    margin-top: 10%;
+}
+.form, .answer-div, .answer-div p{
+    font-size: 3.5vw;
+    color: #888;
+    line-height: 6vw;
+}
+.form::before{
+    content: "form：";
+    color: #666;
+}
+.about::before{
+    content: "考点：";
+    color: #666;
+}
+.answer::before{
+    content: "参考答案：";
+    display: block;
+    color: #666;
+}
+
+.bouns{
+    position: absolute;
+    bottom: 0;
+    height: 5vh;
+    width: 100vw;
+}
+.bouns span{
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 4vw;
+    
+    height: 100%;
+    line-height: 5vh;
+    padding: 0 5vw;
+}
+
+
+.bouns-prev, .bouns-next{
+    width: 50%;
+    background: rgb(57, 137, 190);
+    color: #fff;
+    line-height: 5vh;
+    cursor: pointer;
+}
+
+.overDiv{
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, .2);
+}
+.prompt{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 80vw;
+    height: 40vw;
+    background: #fff;
+    border-radius: 2vw;
+    text-align: center;
+}
+
+span.prompt-text, .prompt-no, .prompt-yes{
+    font-size: 4.5vw;
+    color: #424242;
+}
+span.prompt-text{
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 70%;
+    padding: 10vw;
+    
+}
+.prompt-no, .prompt-yes{
+    width: 30%;
+    border: none;
+    padding: 1vw 5vw;
+    outline: none;
+}
+.prompt-yes{
+    margin-left: 5vw;
+    color: #fff;
+    background: rgb(57, 137, 190);
+}
