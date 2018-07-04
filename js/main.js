@@ -293,6 +293,7 @@ function cancelBobble(dom, type) {
 }
 cancelBobble($(".test-group"), 'touchmove')
 cancelBobble($(".bouns"), 'click')
+cancelBobble($(".logindiv"), 'touchmove')
 
 
 var fl = 1; // 用于记录滑屏数
