@@ -231,6 +231,7 @@ i.iconfont{
     position: absolute;
     box-sizing: border-box;
     top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background: rgba(255, 255, 255, 1);
@@ -262,6 +263,7 @@ i.iconfont{
     color: #fff;
     font-weight: 100;
     font-size: 4.5vw;
+    border: none;
 }
 .notic{
     border: none;
