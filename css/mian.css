@@ -21,6 +21,7 @@ a{
     position: absolute;
     width: 200%;
     min-height: 100vh;
+    background: #fff;
 }
 
 .wraper>div{
