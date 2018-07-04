@@ -1,7 +1,7 @@
 $(document).ready(function () {
     // console.log(group);
     //localStorage.removeItem("punchTime")
-    //localStorage.clear()
+    localStorage.clear()
     login()  // 登录弹窗
     runTree(group) // 渲染列表
 
