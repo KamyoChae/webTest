@@ -1,7 +1,7 @@
 $(document).ready(function () {
     // console.log(group);
     //localStorage.removeItem("punchTime")
-    localStorage.clear()
+    //localStorage.clear()
     login()  // 登录弹窗
     runTree(group) // 渲染列表
 
@@ -24,6 +24,12 @@ var user = {
     inner: null, // 用于存储所点击试题列表的选项
     TestArr: [], // 用于存储获取的全部试题数组
 
+    timer: null, // 用于试题计时器
+    min: 19, // 试题计时器分钟
+    sen: 59, // 试题计时器秒钟
+
+    findArr: [], // 用于收藏集 错题集匹配题目存储 可用于输入框匹配搜索
+
 }
 
 
@@ -43,14 +49,14 @@ function addDayHit() {
      * 存入浏览器数据
      */
     var DayHitCount = storageFn("DayHitCount");
-    console.log(DayHitCount)
+
     if (!DayHitCount) {
 
         // 如果是第一次打卡 则把默认的打卡天数存进去 作为初始化
         DayHitCount = user.DayHitCount; // DayHitCount = 0
         DayHitCount++;
         storageFn("DayHitCount", DayHitCount, true)
-        console.log(DayHitCount + "存入本地")
+
         $(".dayHit-nums").html(DayHitCount)
     } else {
         DayHitCount++;
@@ -83,7 +89,6 @@ function punch() {
     getlastDate() // 获取当前日期
     var punchTime = storageFn("punchTime"); // 读取上次存储的打卡时间
 
-
     if (punchTime == null) {
 
         // 第一次打开 punchTime是空的 将当前时间存进去 
@@ -94,7 +99,7 @@ function punch() {
     } else {
         // 第n次打开
         punchTime = punchTime.split(",")
-        console.log("第二次打开，进行上次存储的数据分割" + punchTime)
+
         if (user.getDat > punchTime[0] || user.getMont > punchTime[1]) {
 
             // 第二次打开该页面 如果符合打卡的条件则 打开打卡开关
@@ -125,28 +130,30 @@ function login() {
 function checkStorage() {
 
     // 校验本地存储数据 
-    var userName = storageFn("userName")
-    var passWord = storageFn("passWord")
-    var DayHitCount = storageFn("DayHitCount")
+
+    checkUser() // 校验用户是否存在 
+    checkHitOk() // 校验打卡天数
+    errorTest() // 初始化错题集
+    collectTest() // 初始化收藏集
+}
+
+function checkHitOk() {
+
+    /**
+     * 校验打卡天数
+     */
+    var DayHitCount = storageFn("DayHitCount") // 获取打卡天数
 
     // 获取当前日期
     getlastDate()
     var punchTime = storageFn("punchTime"); // 读取上次存储的打卡时间
-    console.log(punchTime)
     try {
         if (user.getDat > punchTime[0] || user.getMont > punchTime[1]) {
             storageFn("hitOk", 0, true) // 用于检测， 0 表示到了可以打卡的那天
         }
     } catch (error) {
-        console.log(11)
+
     };
-
-
-    if (userName && passWord) {
-
-        // 如果已经存在用户名和密码 则不需要登录
-        $(".logindiv").css("display", "none")
-    }
 
     if (storageFn("hitOk")) {
 
@@ -158,11 +165,23 @@ function checkStorage() {
 
     if (DayHitCount) {
         // 登录时校验 如果存在数据 则写入
-        console.log(555)
+
         $(".dayHit-nums").html(DayHitCount)
     }
 }
+function checkUser() {
 
+    /**
+     * 校验用户是否存在
+     */
+    var userName = storageFn("userName") // 获取账号
+    var passWord = storageFn("passWord") // 获取密码
+    if (userName && passWord) {
+
+        // 如果已经存在用户名和密码 则不需要登录
+        $(".logindiv").css("display", "none")
+    }
+}
 function storageFn(Name, Value, Bool) {
 
     // 封装一个存取本地数据的函数
@@ -243,14 +262,8 @@ function navClick() {
 
 
 
-
-
-
-
-
-
-$(".result-go").on("click", function(){
-    $(".from-answer").css("display","block")
+$(".result-go").on("click", function () {
+    $(".from-answer").css("display", "block")
     $(".checkSub").css("display", "block");
     $(".result").css("display", "none");
     $(".submitTestDiv").css("display", "none");
@@ -271,16 +284,22 @@ $(".checkSub-yes").on("click", function () {
      * 隐藏询问是否提交试卷的对话框
      * 显示考试结果的对话框
      */
+
+    clearInterval(user.timer) // 清除试题计时器
     $(".checkSub").css("display", "none"); // 隐藏 提示是否提交试卷 对话框
     $(".result").css("display", "block") // 显示考试结果
+
 })
 
 $("span.home").on("click", function (e) {
 
     // 点击返回首页 隐藏无关元素 隐藏试题组 考试结果
-    console.log(e.target)
+
+    clearInterval(user.timer) // 清除试题计时器
     $(".test-group").css("display", "none");
     $(".submitTestDiv").css("display", "none");
+
+    fl = 1; // 恢复滑屏默认值
 })
 
 function cancelBobble(dom, type) {
@@ -293,10 +312,17 @@ function cancelBobble(dom, type) {
 }
 cancelBobble($(".test-group"), 'touchmove')
 cancelBobble($(".bouns"), 'click')
-cancelBobble($(".logindiv"), 'touchmove')
+cancelBobble($(".logindiv, .check-list"), 'touchmove')
 
+
+function cancelScroll(dom) {
+    dom.scroll(function () {
+        return false;
+    })
+}
 
 var fl = 1; // 用于记录滑屏数
+var marDom = null; // 用于记录前后传进来的dom是否为同一个对象
 swape($(".wraper"), 2)
 swape($(".testHere"), 10)
 function swape(dom, pages) {
@@ -316,7 +342,7 @@ function swape(dom, pages) {
 
             pullDeltaX = x - startX; // 移动后的位移
             if (!pullDeltaX) {
-                return;
+                return; // 如果坐标是0 结束事件
             }
         });
 
@@ -348,6 +374,7 @@ function before(ele) {
     if (!ele.is(":animated")) {
         ele.stop(false, true).animate({ left: "+=" + 100 + "vw" }, 300);
         fl--;
+        console.log(ele)
         $(".navnum").html(fl + "/10")
         if (fl == 9) {
 
@@ -370,12 +397,12 @@ function after(ele) {
     if (!ele.is(":animated")) {
         ele.stop().animate({ left: "-=" + 100 + "vw" }, 300);
         fl++;
-        console.log("按钮的flag：" + fl)
+
+        console.log(ele)
         $(".navnum").html(fl + "/10")
 
         if (fl == 10) {
- 
-            console.log("执行到371的操作了")
+
             $(".bouns-next").css("display", "none")
             $(".submitTest").css("display", "inline-block")
 
@@ -387,8 +414,6 @@ function after(ele) {
 $(".submitTest").on("click", function () {
 
 
-    console.log("点击了提交试卷按钮")
-    console.log(fl)
     $(".submitTestDiv").css("display", "block");
 
 })
@@ -398,7 +423,7 @@ function dobutton(dom) {
 
     // 点击上一题 下一题的事件效果
     dom.on("click", function (e) {
-        console.log($(this).attr("class"))
+
         if ($(this).attr("class") == "bouns-prev") {
             if (fl != 1) {
                 before($(".testHere"))
@@ -417,46 +442,25 @@ function dobutton(dom) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // 点击收藏题目
 $(".testHere").on("click", ".Collection", function () {
     if ($(this).hasClass("icon-favorite")) {
 
         // 显示已收藏按钮 执行收藏函数
         $(this).removeClass("icon-favorite").addClass("icon-favoritesfilling")
-        var num = $(this).attr("testnum")
-        collectTest(num, true)
+        var num = $(this).attr("testnum") // 获取题目编号
+        collectTest(num, true, "collectNum") // 题目编号 存入 存入的key
     } else {
 
         // 显示未收藏按钮 执行移除收藏操作
         $(this).removeClass("icon-favoritesfilling").addClass("icon-favorite")
-        var num = $(this).attr("testnum")
-        collectTest(num, false)
+        var num = $(this).attr("testnum") // 获取题目编号
+        collectTest(num, false, "collectNum") // 题目编号 删除 删除的key
     }
 
 })
 
-function collectTest(num, flag) {
+function collectTest(num, flag, storAttr) {
 
     // 用于操作收藏题目
     /**
@@ -465,26 +469,46 @@ function collectTest(num, flag) {
      * 封装两个数组方法 删除数组内的某一个值
      */
 
-    var getLocalNum = storageFn("collectNum") // 获取已经存储的值
+    // 操作该数组 num：题目编号 flag：true/false 存入/删除 storAttr：storageKey
+    dealStorageArr(num, flag, storAttr)
+    collectTest() // 收藏集处理函数
+
+
+}
+
+function dealStorageArr(num, flag, storAttr) {
+
+    // 封装一个用于处理本地数据数组类型的函数
+    // 可用于某个数据数组的存入和删除
+    var getLocalNum = storageFn(storAttr) // 获取已经存储的值的数组
     if (flag) {
+
+        // true 存入值
         var newNum = num + ",";
-        console.log(newNum)
+
         if (getLocalNum == null) {
 
-            console.log("第一次存储收藏的题目编号")
-            storageFn("collectNum", newNum, true)
+            storageFn(storAttr, newNum, true)
         } else {
             getLocalNum += newNum;
-            storageFn("collectNum", getLocalNum, true)
+            storageFn(storAttr, getLocalNum, true)
         }
     } else {
-        var removArr = getLocalNum.split(",");
-        removArr.remove(num);
-        storageFn("collectNum", removArr.join(","), true)
+
+        // false 删除值
+        if (getLocalNum != null) {
+
+            var removArr = getLocalNum.split(",");
+            removArr.remove(num);
+            storageFn(storAttr, removArr.join(","), true)
+        }
+
     }
 
 
 }
+
+
 
 // 封装两个数组方法 用于删除数组里面的某一个值
 // 思路：先获取该值的索引 再通过数组提供的splice方法删除该值
@@ -512,24 +536,49 @@ function checkItem() {
      * 利用绑定的数据 判断所点击的选项是不是正确的
      * 如果不是正确的 获取该题目所在当前父元素的索引 则在试题结果对应的索引显示红色
      */
+    var key1 = 1, // 初始开关 用于点击
+        key2 = 1,
+        itemsType = null; // 用于判断前后两次点击的是否是一个对象
+    $(".checkdiv").on("click", ".checkItem", function (e) {
 
-    $(".checkdiv").on("click",".checkItem", function(e){
-        console.log(this)
         $(this).find(".checkBtn").addClass("ischecked")
         $(this).siblings().find(".checkBtn").removeClass("ischecked")
 
         var ans = $(this).attr("data-result") // 获取选项答案
-        var data_num = $(this).attr("data-num")-1 // 获取选项页面索引 eq索引从0开始
-        console.log(ans)
-        if(ans == "false"){
+        var data_num = $(this).attr("data-num") - 1 // 获取选项页面索引 eq索引从0开始
+
+        if ($(this).parent().attr("testnum") != itemsType) {
+
+            // 如果两次点击的对象都不是同一个 则恢复初始开关
+            key1 = 1
+            key2 = 1
+        }
+        itemsType = $(this).parent().attr("testnum")
+        // 如果点击了选项，则获取该题目的标号 传入错题集函数 
+        var data_testNum = $(".checkdiv").eq(data_num).attr("testNum")  // 获取题目编号
+
+        if (ans == "false") {
 
             // 如果选了错误的答案 就渲染到试题结果
-           
-           console.log(data_num)
+            $(".resultBtn").eq(data_num).removeClass("istrue")
+            $(".resultBtn").eq(data_num).addClass("isfalse")
 
-           $(".resultBtn").eq(data_num).removeClass("istrue")
-           $(".resultBtn").eq(data_num).addClass("isfalse")
-        }else{
+
+
+            // 操作该数组 num：题目编号 flag：true/false 存入/删除 storAttr：storageKey
+            if (key1) {
+                key1 = 0;
+                key2 = 1;
+                dealStorageArr(data_testNum, true, "errorNum")
+            }
+
+        } else {
+            if (key2) {
+                key2 = 0
+                key1 = 1
+                dealStorageArr(data_testNum, false, "errorNum")
+            }
+
             $(".resultBtn").eq(data_num).removeClass("isfalse")
             $(".resultBtn").eq(data_num).addClass("istrue")
         }
@@ -538,7 +587,98 @@ function checkItem() {
 }
 
 
+function collectTest() {
 
+    /**
+     * 收藏集收集函数 可用于初始化收藏集
+     * 根据存入本地的题目编号 搜索对应数据 并渲染出题目
+     */
+
+    var len = splitAndDrawing("collectNum") // 分割并渲染错题集
+
+    $(".collect span").html(len) // 存入
+}
+
+
+function errorTest() {
+
+    /**
+     * 错题集收集函数 可用于初始化错题集
+     * 根据存入本地的题目编号 搜索对应数据 并渲染出题目
+     */
+    var len = splitAndDrawing("errorNum") // 分割并渲染错题集
+
+    $(".error span").html(len) // 存入
+}
+function splitAndDrawing(storageKey) {
+
+    // 通过调用匹配题目标号的函数，封装一个分割并且渲染数据的函数
+
+    var stor = storageFn(storageKey)
+    var len = 0;
+    try {
+        stor = stor.split(",")
+        console.log(stor)
+        for (var i = 0; i < stor.length - 1; i++) { // 因stor的最后一位是空字符串 所以还要-1
+            user.findArr.push(findTest(stor[i]))
+        }
+        len = stor.length - 1;
+    } catch (error) {
+        console.log(stor + "获取为空")
+    }
+
+    runDraw(user.findArr)
+
+    return len
+}
+
+function runDraw(arr) {
+
+    // 渲染列表
+    var str = "";
+    arr.forEach(function (ele, index) {
+        str += '<div class="check-search-items" data-num=' + ele.testNum + '>\
+                    <p class="search-items">'+ ele.test.title + '</p>\
+                    <div class="items-type">\
+                        <span class="items-parent">'+ ele.type + '</span>\
+                        <span class="items-child">'+ ele.about + '</span>\
+                    </div>\
+                </div>'
+    })
+
+    $(".check-search").html(str)
+    $(".check-search-items").on("click", function () {
+
+        // 绑定列表点击
+        var theNum = $(this).attr("data-num")
+        errorDiv(theNum) // 调用查看错题函数
+        $(".check-error-over").css("display", "block");
+    })
+}
+
+function findTest(str) {
+
+    // 封装查找匹配标号的题目的函数 
+    // 返回匹配的错题
+    var obj = null;
+    group.forEach(function (ele, index) {
+        var newobj = ele.content;
+        for (var prop in newobj) {
+            if (newobj.hasOwnProperty(prop)) {
+                var newArr = newobj[prop].questionBank;
+                newArr.forEach(function (el, inde) {
+                    if (el.testNum == str) {
+                        //  console.log(el)
+                        obj = el
+                    }
+                })
+            }
+        };
+    })
+    return obj;
+}
+
+console.log(findTest("jq_000"))
 
 function testIsNull(inner) {
 
@@ -561,8 +701,11 @@ function testIsNull(inner) {
         // 把所有题目的标志属性都重置 0表示未进行测试
         for (var prop in user.TestArr) {
             user.TestArr[prop].exist = 0;
+
         }
-        console.log(user.TestArr)
+
+        localStorage.removeItem("errorNum")// 把存储的错题都清空
+        //localStorage.removeItem("errorNum")// 把存储的错题都清空
         $(".overDiv").css("display", "none");
         /// $(".test-group").css("display", "block")
     })
@@ -580,14 +723,57 @@ $(".prompt-yes").on("click", function () {
 
     /**
      * 点击开始正常测试的按钮 隐藏遮罩层提示框
-     * 显示试题组
+     * 显示试题组 开始计时
      */
     $(".overDiv").css("display", "none");
-    // createTest()
 
+    $(".navtime").html("00:20:00") // 初始化时间
+    setTime()
     $(".test-group").css("display", "block")
 })
 
+
+function setTime() {
+
+    /**
+     * 倒计时二十分钟 00:20:00
+     * 设置分 秒 
+     * 如果规定的时间内完成所有答题 则关闭定时器
+     * 若规定时间内没有完成所有答题 则弹出提示框 强制显示答题结果
+     */
+    var min = user.min,
+        sen = user.sen;
+
+    var that = this;
+    user.timer = setInterval(function () {
+
+        var timego = "00:" + min + ":" + sen
+        $(".navtime").html(timego)
+        sen--;
+
+        if (sen < 0) {
+            sen = 59;
+            min--;
+            if (min < 10) {
+                min = "0" + min;
+            }
+        }
+
+        if (sen < 10) {
+            sen = "0" + sen;
+        }
+        if (min == 0 && sen == 0) {
+            var timego = "00:" + min + ":" + sen
+            $(".navtime").html(timego)
+
+            $(".result p").html("时间到！以下是你的考试成绩，请再接再厉哦是！")
+            $(".submitTestDiv").css("display", "block") // 显示考试结果
+            $(".checkSub").css("display", "none")
+            $(".result").css("display", "block")
+            clearInterval(user.timer)
+        }
+    }, 1000)
+}
 function checkTestOK(test) {
 
     // 用于检测该试题数目 是否足够 
@@ -635,14 +821,14 @@ function checkTestOK(test) {
         $(".testHere").html("")
 
         createTest(); // 生成试题函数
-        console.log("生成了试题")
+
 
     } else {
 
         /**
          * 如果题目不足量 弹框提示是否重新开始考试
          */
-        console.log("没有题目了")
+
         testIsNull(test) // 弹出提示框重新开始函数
     }
 }
@@ -659,14 +845,14 @@ function createTest() {
     $(".bouns-next").css("display", "inline-block")
     var testNum = 10;
     var strTest = "";
-    console.log(user.TestArr)
+
 
     var len = user.TestArr.length;
     while (testNum) {
         var i = Math.floor(Math.random() * len);
         if (!user.TestArr[i].exist) {
             testNum--;
-            console.log(testNum)
+
             user.TestArr[i].exist = 1;
 
             // 把已经生成的题目存入本地 
@@ -681,20 +867,20 @@ function createTest() {
             strTest = '<div class="question">\
                         <span class="Collection iconfont icon-favorite" testNum='+ thisArr.testNum + '></span>\
                         <p class="test-title">'+ test.title + '</p>\
-                        <div class="checkdiv">\
-                            <div class="checkItem" data-num="'+(10-testNum)+'" data-result="'+ test.check.A[1] + '">\
+                        <div class="checkdiv" testNum='+ thisArr.testNum + '>\
+                            <div class="checkItem" data-num="'+ (10 - testNum) + '" data-result="' + test.check.A[1] + '">\
                                 <span class="checkBtn">A</span>\
                                 <span class="checkText">'+ test.check.A[0] + '</span>\
                             </div>\
-                            <div class="checkItem" data-num="'+(10-testNum)+'" data-result="'+ test.check.B[1] + '">\
+                            <div class="checkItem" data-num="'+ (10 - testNum) + '" data-result="' + test.check.B[1] + '">\
                                 <span class="checkBtn">B</span>\
                                 <span class="checkText">'+ test.check.B[0] + '</span>\
                             </div>\
-                            <div class="checkItem" data-num="'+(10-testNum)+'" data-result="'+ test.check.C[1] + '">\
+                            <div class="checkItem" data-num="'+ (10 - testNum) + '" data-result="' + test.check.C[1] + '">\
                                 <span class="checkBtn">C</span>\
                                 <span class="checkText">'+ test.check.C[0] + '</span>\
                             </div>\
-                            <div class="checkItem" data-num="'+(10-testNum)+'" data-result="'+ test.check.D[1] + '">\
+                            <div class="checkItem" data-num="'+ (10 - testNum) + '" data-result="' + test.check.D[1] + '">\
                                 <span class="checkBtn">D</span>\
                                 <span class="checkText">'+ test.check.D[0] + '</span>\
                             </div>\
@@ -709,9 +895,107 @@ function createTest() {
                     </div>';
 
             $(".testHere").append(strTest)
-          // $(".from-answer").css("display","none")
+            // $(".from-answer").css("display","none")
         }
     }
     checkItem() // 绑定点击事件
+
 }
 
+// 个人页面
+$(".collect").on("click", function () {
+    collectTest()
+    leftBan()
+})
+$(".error").on("click", function () {
+
+    /**
+     * 点击错题集
+     * 显示错题集div
+     * 动画滑动过来 同时个人页面隐藏的半透明遮罩显示 并逐渐变为半透明
+     * 
+     */
+    errorTest()
+    leftBan()
+})
+
+function leftBan() {
+
+    // 承载错题集和收藏集的div动画
+    $(".check-list").css("display", "block")
+    if (!$(".check-list").is(":animated")) {
+        $(".check-list").animate({ "left": 0 }, 250)
+
+    }
+    $(".icon-bussinessman").on("click", function () {
+        if (!$(".check-list").is(":animated")) {
+            $(".check-list").animate({ "left": -100 + "vw" }, 250)
+        }
+    })
+}
+
+function errorDiv(num) {
+
+    var obj = findTest(num) // 传入错题标号 返回匹配试题组
+    var str = "";
+    console.log(obj)
+    str = '<div class="error-div">\
+                    <div class="error-top">我的错题</div>\
+                    <p class="error-test-title">'+ obj.test.title + '</p>\
+                    <div class="error-checkdiv">\
+                        <div class="error-checkItem">\
+                            <span class="error-checkBtn">A</span>\
+                            <span class="error-checkText">'+ obj.test.check.A[0] + '</span>\
+                        </div>\
+                        <div class="error-checkItem">\
+                            <span class="error-checkBtn">B</span>\
+                            <span class="error-checkText">'+ obj.test.check.B[0] + '</span>\
+                        </div>\
+                        <div class="error-checkItem">\
+                            <span class="error-checkBtn">C</span>\
+                            <span class="error-checkText">'+ obj.test.check.C[0] + '</span>\
+                        </div>\
+                        <div class="error-checkItem">\
+                            <span class="error-checkBtn">D</span>\
+                            <span class="error-checkText">'+ obj.test.check.D[0] + '</span>\
+                        </div>\
+                    </div>\
+                    <div class="error-show">答案及解析</div>\
+                    <div class="error-from-answer">\
+                        <div class="form">'+ obj.from + '</div>\
+                        <div class="answer-div">\
+                            <p class="about">'+ obj.about + '</p>\
+                            <p class="answer">'+ obj.answer + '</p>\
+                        </div>\
+                    </div>\
+                    <div class="error-btn">\
+                        <button class="error-close">关闭</button>\
+                        <button class="error-remove">从错题集删除</button>\
+                    </div>\
+                </div>'
+
+    $(".check-error-over").html(str)
+    $(".error-close").on("click", function () {
+        $(".check-error-over").css("display", "none");
+    })
+    $(".error-show").on("click", function () {
+        $(".error-from-answer").toggle()
+    })
+}
+
+
+var searchTime = null;
+$(".search-div input").on("input", function () {
+    var that = this;
+    searchTime = setTimeout(function () {
+        runDraw(filterText(that.value, user.findArr)) 
+        // 当点击收藏集 错题集 user.findArr 都会刷新一遍 所以可直接用此全局变量
+    }, 1200)
+})
+function filterText(text, arr) { // 自定义一个filter方法
+    return arr.filter(function (ele, index) { // arr调用filter方法
+        if (ele.test.title.indexOf(text) !== -1) { // indexOf(text) 用于判断输入值value与该name是否有相同的值
+            return true; // 符合条件的列表 返回
+        }
+    })
+}
