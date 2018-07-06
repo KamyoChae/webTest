@@ -20,6 +20,7 @@ a{
 .wraper{
     position: absolute;
     width: 200%;
+    left: 0;
     min-height: 100vh;
     background: #fff;
 }
@@ -148,16 +149,26 @@ i.iconfont{
 .icon-moreunfold, .icon-less{
     float: right;
 }
-
+.mine-over{
+    position: absolute;
+    top: 0;
+    background: rgb(0, 0, 0);
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
 .mine{
     left: 100vw;
     width: 100vw;
     height: inherit;
+    min-height: 100vh;
 }
 .mine-top{
+    position: relative;
     overflow: hidden;
     width: 100%;
-    height: 25vh;
+    height: 50vw;
     background-image: url(../images/usericon.jpg);
     background-size: cover;
     background-position: center;
@@ -258,7 +269,7 @@ i.iconfont{
 }
 
 .submit{
-    background: rgb(57, 137, 190);
+    background: rgb(68, 170, 238);
     text-align: center;
     color: #fff;
     font-weight: 100;
@@ -305,7 +316,7 @@ i.iconfont{
     color: #fff;
 }
 .test-nav{
-    background:rgb(57, 137, 190);
+    background:rgb(68, 170, 238);
     height:6vh;
     line-height: 6vh;
 }
@@ -317,12 +328,12 @@ span.home{
     height: 2vw;
 }
 div.test-content{
-    font-size: 2vh;
+    font-size: 4vw;
     background:  #424242;
-    height: 4vh;
-    line-height: 4vh;
+    height: 8vw;
+    line-height: 8vw;
     
-    padding: 0 2vh 0 2vh;
+    padding: 0 2vw 0 2vw;
 }
 .navtime , .navnum{
     font-size: 2.5vh;
@@ -339,15 +350,19 @@ div.test-content{
     width: 1000vw;
     height: 85vh;
 }
-.question{
-    float: left;
+.question, .error-div{
+
     position: relative;
     box-sizing: border-box;
     padding: 4vw;
-    background: #ffffff;
     width: 100vw;
     height: 100%;
+    background: #eaf1f5;
 }
+.question{
+    float: left;
+}
+
 .question span.Collection{
     position: absolute;
     bottom: 10vw;
@@ -356,32 +371,36 @@ div.test-content{
     height: 10vw;
     width: 10vw;
     border-radius: 50%;
-    color: rgb(57, 137, 190);
+    color: rgb(68, 170, 238);
     font-size: 8vw;
     line-height: 10vw;
     text-align: center;
 }
-.test-title{
+.test-title, .error-test-title{
     font-size: 4.5vw;
 }
-.checkdiv{
+.checkdiv, .error-checkdiv{
     width: 100%;
     margin-top: 5%;
 }
-.checkItem span{
+.checkItem span, .error-checkItem span{
     font-size: 4vw;
     vertical-align: middle;
 }
-.checkItem{
+.checkItem, .error-checkItem{
     margin: 4vw;
 }
-.checkText{
+.checkItem:active{
+    background: rgba(68, 170, 238, .2);
+    border-radius: 4px;
+}
+.checkText, .error-checkText{
     display: inline-block;
     width: 85%;
 }
-.checkBtn{
+.checkBtn, .error-checkBtn{
     display: inline-block;
-    border: 1px solid rgb(57, 137, 190);
+    border: 1px solid rgb(68, 170, 238);
 
     width: 8vw;
     height: 8vw;
@@ -395,6 +414,22 @@ div.test-content{
     width: 100%;
     margin-top: 10%;
 }
+.from-answer::before, .error-show{
+
+    content: "答案及解析";
+    display: block;
+    width: 100%;
+    font-size: 4vw;
+    height: 8vw;
+    margin: 2em 0;
+    line-height: 8vw;
+    text-align: center;
+    color: #424242;
+    border: #6c7b8d solid 1px;
+    border-radius: 4px;
+}
+
+
 .form, .answer-div, .answer-div p{
     font-size: 3.5vw;
     color: #888;
@@ -417,8 +452,9 @@ div.test-content{
 .bouns{
     position: absolute;
     bottom: 0;
-    height: 5vh;
+    height: 6vh;
     width: 100vw;
+    overflow: hidden;
 }
 .bouns span{
     display: inline-block;
@@ -427,16 +463,16 @@ div.test-content{
     font-size: 4vw;
     
     height: 100%;
-    line-height: 5vh;
+    line-height: 6vh;
     padding: 0 5vw;
 }
 
 
 .bouns-prev, .bouns-next, .submitTest{
     width: 50%;
-    background: rgb(57, 137, 190);
+    background: rgb(68, 170, 238);
     color: #fff;
-    line-height: 5vh;
+    line-height: 6vh;
     cursor: pointer;
 }
 .submitTest{
@@ -467,6 +503,7 @@ div.test-content{
 span.checkSub-text, span.prompt-text, .prompt-no, .prompt-yes, .prompt-again, .result-exit, .result-go,.checkSub-no, .checkSub-yes{
     font-size: 4.5vw;
     color: #424242;
+    border-radius: 4px;
 }
 span.prompt-text, span.checkSub-text{
     display: block;
@@ -485,7 +522,7 @@ span.prompt-text, span.checkSub-text{
 .checkSub-yes, .prompt-yes, .prompt-again, .result-go{
     margin-left: 5vw;
     color: #fff;
-    background: rgb(57, 137, 190);
+    background: rgb(68, 170, 238);
 }
 .checkSub-yes, .prompt-yes{
     display: inline-block;
@@ -550,16 +587,144 @@ span.prompt-text, span.checkSub-text{
     
 }
 .istrue{
-    background: rgb(57, 137, 190);
+    background: rgb(68, 170, 238);
 }
 .isfalse{
     background: red;
 }
 .ischecked{
-    background: rgb(57, 137, 190);
+    background: rgb(68, 170, 238);
     color: #fff;
 }
 .resultBtnDeal{
     text-align: center;
     margin-top: 20%;
+}
+
+.check-list{
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+    top: 0;
+    left: -100vw;
+    width: 100vw;
+    border-right: 1px solid #acacac;
+    height: 100vh;
+    background: rgb(255, 255, 255);
+}
+.search-div{
+    height: 10vw;
+    text-align: center;
+    padding: 2vw;
+    background: rgb(68, 170, 238);
+}
+.icon-bussinessman{
+    
+    color: #fff;
+    margin-left: 1em;
+}
+.search-div input{
+    box-sizing: border-box;
+    width: 90%;
+    height: 10vw;
+    font-size: 3.5vw;
+    border: none;
+    padding-left: .5em;
+    border-radius: 4px;
+    outline: none;
+
+}
+.check-search{
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    background: #eaf1f5;
+}
+
+.check-search-items{
+    box-sizing: border-box;
+    padding: .5em;
+    width: 100%;
+    height: 4em;
+    font-size: 4vw;
+    background: #fff;
+    margin-top: .5em;
+}
+.search-items{
+    font-size: 4vw;
+    color: #424242;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.items-type{
+    width: 100%;
+    font-size: 4vw;
+    height: 1.5em;
+    line-height: 1.5em;
+}
+
+.items-type span{
+    font-weight: 100;
+    font-size: 3.5vw;
+    padding: 0 .8em;
+    color: #888;
+    border-left: 1px solid #eaf1f5;
+}
+
+.check-error-over{
+    display: none;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, .5);
+}
+.error-div{
+    height: 100vh;
+    background: #eaf1f5;
+}
+
+.error-btn{
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.error-btn button{
+    font-size: 4.5vw;
+    padding: .5em;
+    width: 50%;
+    border: none;
+    outline: none;
+    color: #fff;
+    background:#dd3636
+}
+.error-btn button:first-child{
+    background: #424242;
+}
+.error-top{
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 2.5em;
+    line-height: 2.5em;
+    background: #424242;
+    color: #fff;
+    font-size: 4.5vw;
+    padding: 0 1em;
+}
+.error-test-title{
+    margin-top: 2.5em;
+}
+.error-from-answer{
+    display: none;
+}
+.error-show:active{
+    background: #acacac;
+    color: #fff;
 }
