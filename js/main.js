@@ -285,6 +285,9 @@ $(".checkSub-yes").on("click", function () {
      * 显示考试结果的对话框
      */
 
+
+    errorTest() // 修改错题集
+    collectTest() // 修改收藏集
     clearInterval(user.timer) // 清除试题计时器
     $(".checkSub").css("display", "none"); // 隐藏 提示是否提交试卷 对话框
     $(".result").css("display", "block") // 显示考试结果
@@ -703,7 +706,7 @@ function testIsNull(inner) {
             user.TestArr[prop].exist = 0;
 
         }
-
+        $(".resultBtnDiv span").attr("class","resultBtn isfalse") // 题库答案全部重置 
         localStorage.removeItem("errorNum")// 把存储的错题都清空
         //localStorage.removeItem("errorNum")// 把存储的错题都清空
         $(".overDiv").css("display", "none");
@@ -904,6 +907,7 @@ function createTest() {
 
 // 个人页面
 $(".collect").on("click", function () {
+    $(".check-search").html("")
     collectTest()
     leftBan()
 })
@@ -915,6 +919,7 @@ $(".error").on("click", function () {
      * 动画滑动过来 同时个人页面隐藏的半透明遮罩显示 并逐渐变为半透明
      * 
      */
+    $(".check-search").html("")
     errorTest()
     leftBan()
 })
