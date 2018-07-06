@@ -613,7 +613,7 @@ function errorTest() {
 function splitAndDrawing(storageKey) {
 
     // 通过调用匹配题目标号的函数，封装一个分割并且渲染数据的函数
-
+    user.findArr = [];
     var stor = storageFn(storageKey)
     var len = 0;
     try {
