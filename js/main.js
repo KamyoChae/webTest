@@ -313,7 +313,8 @@ function cancelBobble(dom, type) {
     })
 
 }
-cancelBobble($(".test-group"), 'touchmove')
+
+cancelBobble($(".test-group, .submitTestDiv, .overDiv"), 'touchmove')
 cancelBobble($(".bouns"), 'click')
 cancelBobble($(".logindiv, .check-list"), 'touchmove')
 
