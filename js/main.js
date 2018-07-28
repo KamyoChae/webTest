@@ -125,6 +125,10 @@ function login() {
             storageFn("passWord", user.passWord, true)
             $(".logindiv").css("display", "none")
         }
+        
+        // 将账户名读取出来 放入用户界面
+        $(".username-title").html(storageFn("userName", false))
+
     })
 }
 function checkStorage() {
