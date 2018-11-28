@@ -1,7 +1,7 @@
 # webTest
 web应用-题库demo
 
-如果在pc端打开 ，请按f12打开控制台选中移动端开发模式 [https://kamyochae.github.io/webTest/](https://kamyochae.github.io/webTest/)
+# 如果在pc端打开 ，请按f12打开控制台选中移动端开发模式 [查看demo](https://kamyochae.github.io/webTest/)
 
 登录->一款题库小应用，仅适配移动端
   
